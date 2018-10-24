@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright © 2018 Magestore. All rights reserved.
+  ~ See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+    <event name="webpos_get_payment_after">
+        <observer name="webpospaypal_get_payment_after" instance="Magestore\WebposPaypal\Observer\GetPaymentAfter" />
+    </event>
+
+</config>
