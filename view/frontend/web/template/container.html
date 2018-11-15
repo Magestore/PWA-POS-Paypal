@@ -1,0 +1,37 @@
+<!--
+  ~ Copyright © 2018 Magestore. All rights reserved.
+  ~ See COPYING.txt for license details.
+  -->
+
+<div class="content" data-bind="visible:visible">
+    <button class="close_button" data-bind="i18n:'Close', visible:(!loading()), click: close"></button>
+    <div class="indicator" data-bind="visible:loading">
+        <!--ko if:isAuthorize-->
+        <h4 class='title' data-bind="i18n:'Checking information'"></h4>
+        <!--/ko-->
+        <!--ko ifnot:isAuthorize-->
+        <h4 class='title' data-bind="i18n:'Processing'"></h4>
+        <!--/ko-->
+        <span class="loader"></span>
+    </div>
+    <div class="instruction" data-bind="visible:(!loading())">
+        <img class="logo" data-bind="attr:{src:logoUrl}"/>
+        <div class="action-button" data-bind="visible:enableSendInvoice">
+            <button class="button btn-cl-cfg-active" data-bind="i18n:'Customer login on Paypal', click:authorize"></button>
+            <button class="button btn-cl-cfg-active" data-bind="i18n:'Send Paypal invoice to customer', click:sendInvoice"></button>
+        </div>
+        <!--ko if:isAuthorize-->
+        <ul class="infos" data-bind="visible:(!blocked())">
+            <li class="info" data-bind="i18n:'A new secure window will open to connect with Paypal'"></li>
+        </ul>
+        <ul class="issues" data-bind="visible:blocked">
+            <li class="issue" data-bind="i18n:'Your browser has blocked the automatic popup, you can click TRY AGAIN button to re-connect with Paypal'"></li>
+            <li class="issue" data-bind="i18n:'You should allow this site open the pop-ups with the following instructions'"></li>
+            <li class="issue" data-bind="i18n:'Chrome: Settings > Show advanced settings… > Privacy > Content settings > Pop-ups > Manage exceptions'"></li>
+            <li class="issue" data-bind="i18n:'Firefox: Options > Content > Block pop-up > Exceptions'"></li>
+            <li class="issue" data-bind="i18n:'Safari: Safari > Preferences > Security > Make sure Block pop-up windows is NOT selected'"></li>
+            <li class="issue"><button class="button btn-cl-cfg-active" data-bind="i18n:'TRY AGAIN', click:tryAgain"></button></li>
+        </ul>
+        <!--/ko-->
+    </div>
+</div>

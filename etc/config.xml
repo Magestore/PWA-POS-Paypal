@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright © 2018 Magestore. All rights reserved.
+  ~ See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <!-- Set default settings -->
+        <webpos>
+            <payment>
+                <paypal>
+                    <enable>0</enable>
+                    <title>PayPal</title>
+                    <sort_order>4</sort_order>
+                    <payment_action>Sale</payment_action>
+                    <is_sandbox>0</is_sandbox>
+                    <enable_send_invoice>0</enable_send_invoice>
+                </paypal>
+            </payment>
+        </webpos>
+        <payment>
+            <ppdirectpayment_integration>
+                <model>Magestore\WebposPaypal\Model\Payment\Online\Paypal\DirectPaymentIntegration</model>
+            </ppdirectpayment_integration>
+        </payment>
+    </default>
+</config>

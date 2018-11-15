@@ -1,0 +1,28 @@
+{
+  "name": "magestore/pwapospaypal",
+  "description": "N/A",
+  "require": {
+  },
+  "type": "project",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "magestore",
+      "email": "support@magestore.com",
+      "homepage": "https://www.magestore.com/",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Magestore\\WebposPaypal\\": ""
+    }
+  }
+}

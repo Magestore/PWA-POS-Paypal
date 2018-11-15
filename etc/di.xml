@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright © 2018 Magestore. All rights reserved.
+  ~ See COPYING.txt for license details.
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magestore\WebposPaypal\Api\PaypalServiceInterface" type="Magestore\WebposPaypal\Model\PaypalService"/>
+    <preference for="Magestore\WebposPaypal\Api\PaypalInterface" type="Magestore\WebposPaypal\Model\Paypal"/>
+    <preference for="Magestore\WebposPaypal\Api\Data\TransactionInterface" type="Magestore\WebposPaypal\Model\Data\Transaction"/>
+    <preference for="Magestore\WebposPaypal\Api\Data\ItemInterface" type="Magestore\WebposPaypal\Model\Data\Item"/>
+    <preference for="Magestore\WebposPaypal\Api\Data\TotalInterface" type="Magestore\WebposPaypal\Model\Data\Total"/>
+    <preference for="Magestore\WebposPaypal\Api\Data\InvoiceInterface" type="Magestore\WebposPaypal\Model\Data\Invoice"/>
+    <preference for="Magestore\WebposPaypal\Api\Data\DirectResponseInterface" type="Magestore\WebposPaypal\Model\Data\DirectResponse"/>
+    <preference for="Magestore\WebposPaypal\Api\Data\DirectRequestInterface" type="Magestore\WebposPaypal\Model\Data\DirectRequest"/>
+    <preference for="Magestore\WebposPaypal\Api\Data\DirectPaymentRequestInterface" type="Magestore\WebposPaypal\Model\Data\DirectPaymentRequest"/>
+    <preference for="Magestore\WebposPaypal\Api\Data\SendInvoiceResponseInterface" type="Magestore\WebposPaypal\Model\Data\SendInvoiceResponse"/>
+</config>

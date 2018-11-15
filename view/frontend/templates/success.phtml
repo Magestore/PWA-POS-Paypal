@@ -1,0 +1,9 @@
+<script>
+    var parentWindow = window.opener;
+    if(parentWindow){
+        if(typeof parentWindow.paypalService != 'undefined' && typeof parentWindow.paypalService.success == 'function'){
+            parentWindow.paypalService.success('<?php echo $block->getData('api_response');?>');
+        }
+    }
+    window.close();
+</script>

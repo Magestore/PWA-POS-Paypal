@@ -1,0 +1,28 @@
+
+<?php /* @var $block Magestore\WebposPaypal\Block\Adminhtml\Config\Paypalsignin */ ?>
+
+<script>
+    require([
+        'jquery',
+        'prototype'
+    ], function(jQuery){
+
+        var collectSpan = jQuery('#collect_span');
+
+        jQuery('#collect_button').click(function () {
+            var params = {};
+            var redirectUrl = '<?php echo $block->getRedirectUrl()?>';
+            var clientId = '<?php echo $block->getClientId()?>';
+            var loginUrl = '<?php echo $block->getPaypalLoginUrl()?>';
+            var url = loginUrl+'?scope=openid https://uri.paypal.com/services/paypalattributes/business https://uri.paypal.com/services/paypalhere address email&response_type=code&redirect_uri='+redirectUrl+'&client_id='+clientId;
+            var signin_window = window.open(url, 'print_zreport', 'status=1,width=500,height=700');
+            if(signin_window){
+                signin_window.open();
+            }else{
+                alert("<?php echo __('Your browser has blocked the automatic popup, please change your browser setting or print the receipt manually');?>");
+            }
+        });
+
+    });
+</script>
+<?php echo $block->getButtonHtml() ?>

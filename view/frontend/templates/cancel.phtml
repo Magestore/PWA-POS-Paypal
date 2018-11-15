@@ -1,0 +1,9 @@
+<script>
+    var parentWindow = window.opener;
+    if(parentWindow){
+        if(typeof parentWindow.paypalService != 'undefined' && typeof parentWindow.paypalService.cancel == 'function'){
+            parentWindow.paypalService.cancel();
+        }
+        window.close();
+    }
+</script>

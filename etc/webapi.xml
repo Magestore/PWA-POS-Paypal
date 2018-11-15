@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright © 2018 Magestore. All rights reserved.
+  ~ See COPYING.txt for license details.
+  -->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <route url="/V1/webpos/paypal/sendInvoice" method="POST">
+        <service class="Magestore\WebposPaypal\Api\PaypalServiceInterface" method="createAndSendInvoiceToCustomer"/>
+        <resources>
+            <resource ref="Magestore_Webpos::manage_pos" />
+        </resources>
+    </route>
+
+    <route url="/V1/webpos/paypal/startPayment" method="POST">
+        <service class="Magestore\WebposPaypal\Api\PaypalServiceInterface" method="startPayment"/>
+        <resources>
+            <resource ref="Magestore_Webpos::manage_pos" />
+        </resources>
+    </route>
+
+    <route url="/V1/webpos/paypal/finishPayment" method="POST">
+        <service class="Magestore\WebposPaypal\Api\PaypalServiceInterface" method="finishPaypalHerePayment"/>
+        <resources>
+            <resource ref="Magestore_Webpos::manage_pos" />
+        </resources>
+    </route>
+
+    <route url="/V1/webpos/paypal/directPayment" method="POST">
+        <service class="Magestore\WebposPaypal\Api\PaypalServiceInterface" method="directPayment"/>
+        <resources>
+            <resource ref="Magestore_Webpos::manage_pos" />
+        </resources>
+    </route>
+
+    <route url="/V1/webpos/paypal/getAccessToken" method="GET">
+        <service class="Magestore\WebposPaypal\Api\PaypalServiceInterface" method="getAccessToken"/>
+        <resources>
+            <resource ref="Magestore_Webpos::manage_pos" />
+        </resources>
+    </route>
+</routes>

@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright © 2018 Magestore. All rights reserved.
+  ~ See COPYING.txt for license details.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="webpos">
+            <group id="payment">
+                <group id="paypal" translate="label" sortOrder="100" type="text" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>PayPal</label>
+                    <field id="enable" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="0" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="title" translate="label" sortOrder="15" type="text" showInDefault="1" showInWebsite="0">
+                        <label>Title</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="api_username" translate="label" sortOrder="20" type="obscure" showInDefault="1" showInWebsite="0">
+                        <label>API Username</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="api_password" translate="label" sortOrder="30" type="obscure" showInDefault="1" showInWebsite="0">
+                        <label>API Password</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="api_signature" translate="label" sortOrder="40" type="obscure" showInDefault="1" showInWebsite="0">
+                        <label>API Signature</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="is_sandbox" translate="label" sortOrder="50" type="select" showInDefault="1" showInWebsite="0">
+                        <label>Sandbox Mode</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="payment_action" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Payment Action</label>
+                        <source_model>Magestore\WebposPaypal\Model\Source\PaymentActions</source_model>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="sort_order" translate="label" sortOrder="57" type="text" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Sort Order</label>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="enable_send_invoice" translate="label" sortOrder="60" type="select" showInDefault="1" showInWebsite="0">
+                        <label>Allow customer pay via email</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="client_id" translate="label" sortOrder="70" type="text" showInDefault="1" showInWebsite="0">
+                        <label>Your Application Client ID</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                            <field id="*/*/*/enable_send_invoice">1</field>
+                        </depends>
+                    </field>
+                    <field id="client_secret" translate="label" sortOrder="80" type="text" showInDefault="1" showInWebsite="0">
+                        <label>Your Application Client Secret</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                            <field id="*/*/*/enable_send_invoice">1</field>
+                        </depends>
+                    </field>
+                    <!--<field id="enable_paypalhere" translate="label" sortOrder="45" type="select" showInDefault="1" showInWebsite="0">-->
+                        <!--<label>Allow paypal here</label>-->
+                        <!--<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>-->
+                        <!--<depends>-->
+                            <!--<field id="*/*/*/enable">1</field>-->
+                        <!--</depends>-->
+                    <!--</field>-->
+                    <!--<field id="redirect_url" translate="label" sortOrder="50" type="label" showInDefault="1" showInWebsite="0">-->
+                        <!--<frontend_model>Magestore\WebposPaypal\Block\Adminhtml\Config\Redirect</frontend_model>-->
+                        <!--<label>Redirect Url</label>-->
+                        <!--<depends>-->
+                            <!--<field id="*/*/*/enable_paypalhere">1</field>-->
+                            <!--<field id="*/*/*/enable">1</field>-->
+                        <!--</depends>-->
+                        <!--<comment>Copy and paste this link into your paypal app</comment>-->
+                    <!--</field>-->
+                    <!--<field id="paypalhere_signin" translate="label" sortOrder="55" type="button" showInDefault="1" showInWebsite="0">-->
+                        <!--<frontend_model>Magestore\WebposPaypal\Block\Adminhtml\Config\Paypalsignin</frontend_model>-->
+                        <!--<depends>-->
+                            <!--<field id="*/*/*/enable_paypalhere">1</field>-->
+                            <!--<field id="*/*/*/enable">1</field>-->
+                        <!--</depends>-->
+                    <!--</field>-->
+                    <group id="merchant_infomation" translate="label" sortOrder="90" type="text" showInDefault="1" showInWebsite="0">
+                        <label>Merchant Information</label>
+                        <depends>
+                            <field id="*/*/*/enable">1</field>
+                            <field id="*/*/*/enable_send_invoice">1</field>
+                        </depends>
+                        <field id="email" translate="label" sortOrder="1" type="text" showInDefault="1" showInWebsite="0">
+                            <label>Email</label>
+                            <validate>validate-email required-entry</validate>
+                        </field>
+                        <field id="firstname" translate="label" sortOrder="2" type="text" showInDefault="1" showInWebsite="0">
+                            <label>First Name</label>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="lastname" translate="label" sortOrder="3" type="text" showInDefault="1" showInWebsite="0">
+                            <label>Last Name</label>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="buisiness_name" translate="label" sortOrder="4" type="text" showInDefault="1" showInWebsite="0">
+                            <label>Buisiness Name</label>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="phone" translate="label" sortOrder="5" type="text" showInDefault="1" showInWebsite="0">
+                            <label>Phone</label>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="street" translate="label" sortOrder="6" type="text" showInDefault="1" showInWebsite="0">
+                            <label>Street</label>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="city" translate="label" sortOrder="7" type="text" showInDefault="1" showInWebsite="0">
+                            <label>City</label>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="state" translate="label" sortOrder="8" type="text" showInDefault="1" showInWebsite="0">
+                            <label>State</label>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="postal_code" translate="label" sortOrder="9" type="text" showInDefault="1" showInWebsite="0">
+                            <label>Postal Code</label>
+                            <validate>required-entry</validate>
+                        </field>
+                        <field id="country_id" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="0">
+                            <label>Country Code</label>
+                            <validate>required-entry</validate>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <frontend_class>countries</frontend_class>
+                        </field>
+                    </group>
+                    <group id="guides" translate="label" sortOrder="100" type="text" showInDefault="1" showInWebsite="0">
+                        <label>Guide</label>
+                        <field id="setup_guide" translate="label" sortOrder="6" type="text" showInDefault="1" showInWebsite="0">
+                            <label>Setup guide</label>
+                            <frontend_model>Magestore\WebposPaypal\Block\Adminhtml\Config\Instruction</frontend_model>
+                        </field>
+                    </group>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

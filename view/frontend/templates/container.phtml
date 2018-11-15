@@ -1,0 +1,28 @@
+<div id="webpos_paypal_integration_container" class="hide" data-bind="scope:'webpos_paypal_integration'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<div id="webpos_paypal_integration_overlay" class="hide"></div>
+<?php if($block->isEnablePaypal()):?>
+<script type="text/x-magento-init">
+    {
+        "#webpos_paypal_integration_container": {
+            "Magento_Ui/js/core/app": {
+                "components" : {
+                    "webpos_paypal_integration": {
+                        "component": "Magestore_WebposPaypal/js/view/container",
+                         "displayArea": "webpos_paypal_integration"
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    require([
+        'Magestore_WebposPaypal/js/model/paypal'
+    ], function (PaypalService) {
+        PaypalService.enableSendInvoice(('<?php echo $block->isEnableSendInvoice();?>' == 'true')?true:false);
+        PaypalService.logoUrl('<?php echo $block->getViewFileUrl('Magestore_WebposPaypal::images/secure-paypal-logo.jpg');?>');
+    });
+</script>
+<?php endif;?>
