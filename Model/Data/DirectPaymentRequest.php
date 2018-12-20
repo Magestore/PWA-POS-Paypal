@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magestore\WebposPaypal\Model\Data;
+
 use Magestore\WebposPaypal\Api\Data\DirectPaymentRequestInterface;
 
 /**
@@ -28,77 +29,89 @@ class DirectPaymentRequest extends \Magento\Framework\DataObject implements Dire
     /**
      * @inheritdoc
      */
-    public function getQuoteId() {
+    public function getQuoteId()
+    {
         return $this->getData(self::QUOTE_ID);
     }
     /**
      * @inheritdoc
      */
-    public function setQuoteId($quoteId) {
+    public function setQuoteId($quoteId)
+    {
         return $this->setData(self::QUOTE_ID, $quoteId);
     }
 
     /**
      * @inheritdoc
      */
-    public function getMethod() {
+    public function getMethod()
+    {
         return $this->getData(self::METHOD);
     }
     /**
      * @inheritdoc
      */
-    public function setMethod($method) {
+    public function setMethod($method)
+    {
         return $this->setData(self::METHOD, $method);
     }
 
     /**
      * @inheritdoc
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->getData(self::TITLE);
     }
     /**
      * @inheritdoc
      */
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         return $this->setData(self::TITLE, $title);
     }
     /**
      * @inheritdoc
      */
-    public function getAmountPaid() {
+    public function getAmountPaid()
+    {
         return $this->getData(self::AMOUNT_PAID);
     }
     /**
      * @inheritdoc
      */
-    public function setAmountPaid($amountPaid) {
+    public function setAmountPaid($amountPaid)
+    {
         return $this->setData(self::AMOUNT_PAID, round($amountPaid, 4));
     }
 
     /**
      * @inheritdoc
      */
-    public function getBaseAmountPaid() {
+    public function getBaseAmountPaid()
+    {
         return $this->getData(self::BASE_AMOUNT_PAID);
     }
     /**
      * @inheritdoc
      */
-    public function setBaseAmountPaid($baseAmountPaid) {
+    public function setBaseAmountPaid($baseAmountPaid)
+    {
         return $this->setData(self::BASE_AMOUNT_PAID, round($baseAmountPaid, 4));
     }
 
     /**
      * @inheritdoc
      */
-    public function getReferenceNumber() {
+    public function getReferenceNumber()
+    {
         return $this->getData(self::REFERENCE_NUMBER);
     }
     /**
      * @inheritdoc
      */
-    public function setReferenceNumber($referenceNumber) {
+    public function setReferenceNumber($referenceNumber)
+    {
         return $this->setData(self::REFERENCE_NUMBER, $referenceNumber);
     }
 
@@ -134,13 +147,15 @@ class DirectPaymentRequest extends \Magento\Framework\DataObject implements Dire
     /**
      * @inheritdoc
      */
-    public function getCardType() {
+    public function getCardType()
+    {
         return $this->getData(self::CARD_TYPE);
     }
     /**
      * @inheritdoc
      */
-    public function setCardType($cardType) {
+    public function setCardType($cardType)
+    {
         return $this->setData(self::CARD_TYPE, $cardType);
     }
 
@@ -161,7 +176,8 @@ class DirectPaymentRequest extends \Magento\Framework\DataObject implements Dire
 
     public function setCcType($ccType)
     {
-        return $this->setData(self::CC_TYPE, $ccType);    }
+        return $this->setData(self::CC_TYPE, $ccType);
+    }
 
     public function getCcNumber()
     {

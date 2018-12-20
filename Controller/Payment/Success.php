@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magestore\WebposPaypal\Controller\Payment;
+
 use Magestore\Webpos\Model\Exception;
 
 /**
@@ -24,13 +25,13 @@ class Success extends \Magestore\WebposPaypal\Controller\AbstractAction
         $paymentId = $this->getRequest()->getParam('paymentId');
         $payerId = $this->getRequest()->getParam('PayerID');
         $isApp = $this->getRequest()->getParam('isApp');
-        if($isApp) {
+        if ($isApp) {
             if ($paymentId) {
                 $transactionId = $this->paypalService->finishPaypalHerePayment($paymentId, $payerId);
                 $response['transactionId'] = $transactionId;
                 $response['message'] = __('Payment has been completed');
             }
-            if($response['transactionId']) {
+            if ($response['transactionId']) {
                 return $transactionId;
             } else {
                 throw new \Magento\Framework\Exception\StateException(
@@ -42,7 +43,7 @@ class Success extends \Magestore\WebposPaypal\Controller\AbstractAction
                 $transactionId = $this->paypalService->finishPayment($paymentId, $payerId);
                 $response['transactionId'] = $transactionId;
                 $response['message'] = __('Payment has been completed');
-            }  else{
+            } else {
                 $response['message'] = __('An error occur during the payment processing');
                 $response['success'] = false;
             }

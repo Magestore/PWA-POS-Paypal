@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magestore\WebposPaypal\Model\Data;
+
 use Magestore\WebposPaypal\Api\Data\DirectRequestInterface;
 
 /**
@@ -88,7 +89,8 @@ class DirectRequest extends \Magento\Framework\Api\AbstractExtensibleObject impl
      *
      * @return string|null
      */
-    public function getCustomerEmail() {
+    public function getCustomerEmail()
+    {
         return $this->_get(self::CUSTOMER_EMAIL);
     }
     /**
@@ -97,7 +99,8 @@ class DirectRequest extends \Magento\Framework\Api\AbstractExtensibleObject impl
      * @param string|null $customerEmail
      * @return $this
      */
-    public function setCustomerEmail($customerEmail) {
+    public function setCustomerEmail($customerEmail)
+    {
         return $this->setData(self::CUSTOMER_EMAIL, $customerEmail);
     }
 
@@ -117,6 +120,4 @@ class DirectRequest extends \Magento\Framework\Api\AbstractExtensibleObject impl
     {
         return $this->setData(self::ORDER_INCREMENT_ID, $orderIncrementId);
     }
-
-
 }

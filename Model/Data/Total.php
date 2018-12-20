@@ -20,7 +20,8 @@ class Total extends \Magento\Framework\Api\AbstractExtensibleObject implements \
      * @api
      * @return string|null
      */
-    public function getCode(){
+    public function getCode()
+    {
         return $this->_get(self::CODE);
     }
 
@@ -31,7 +32,8 @@ class Total extends \Magento\Framework\Api\AbstractExtensibleObject implements \
      * @param string $code
      * @return $this
      */
-    public function setCode($code){
+    public function setCode($code)
+    {
         return $this->setData(self::CODE, $code);
     }
 
@@ -41,7 +43,8 @@ class Total extends \Magento\Framework\Api\AbstractExtensibleObject implements \
      * @api
      * @return string|null
      */
-    public function getAmount(){
+    public function getAmount()
+    {
         return $this->_get(self::AMOUNT);
     }
 
@@ -52,7 +55,8 @@ class Total extends \Magento\Framework\Api\AbstractExtensibleObject implements \
      * @param string $amount
      * @return $this
      */
-    public function setAmount($amount){
+    public function setAmount($amount)
+    {
         return $this->setData(self::AMOUNT, $amount);
     }
 }

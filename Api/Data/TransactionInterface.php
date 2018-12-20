@@ -71,5 +71,4 @@ interface TransactionInterface
      * @return $this
      */
     public function setDescription($description);
-
 }

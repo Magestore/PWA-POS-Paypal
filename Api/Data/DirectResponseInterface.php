@@ -70,6 +70,4 @@ interface DirectResponseInterface
      * @return $this
      */
     public function setTransactionId($transactionId);
-
-
 }

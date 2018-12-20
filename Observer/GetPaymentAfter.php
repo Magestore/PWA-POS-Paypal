@@ -46,7 +46,7 @@ class GetPaymentAfter implements ObserverInterface
     {
         $payments = $observer->getData('payments');
         $paymentList = $payments->getList();
-        if($this->paypalHelper->isEnablePaypal()) {
+        if ($this->paypalHelper->isEnablePaypal()) {
             $paymentList[] = $this->getWebposPaypalDirectPayment()->getData();
         }
 
@@ -104,7 +104,7 @@ class GetPaymentAfter implements ObserverInterface
         $paymentModel->setClientId($clientId);
         $paymentModel->setIsSandbox($isSandbox);
         $accessToken = $this->paymentHelper->getStoreConfig('webpos/payment/paypal/access_token');
-        if($accessToken) {
+        if ($accessToken) {
             $paymentModel->setAccessToken($accessToken);
         }
         return $paymentModel;

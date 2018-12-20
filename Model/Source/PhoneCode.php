@@ -18,12 +18,13 @@ class PhoneCode
      * Parsed codes
      * @var array
      */
-    protected $phoneCodes = array();
+    protected $phoneCodes = [];
 
     /**
      * PhoneCode constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->phoneCodes = \Zend_Json::decode(self::PHONECODE_JSON);
     }
 

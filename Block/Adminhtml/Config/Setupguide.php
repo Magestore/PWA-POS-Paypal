@@ -7,7 +7,6 @@
 
 namespace Magestore\WebposPaypal\Block\Adminhtml\Config;
 
-
 class Setupguide extends \Magento\Backend\Block\Template
 {
     /**
@@ -19,8 +18,8 @@ class Setupguide extends \Magento\Backend\Block\Template
      * Get api test url
      * @return string
      */
-    public function getTestApiUrl(){
+    public function getTestApiUrl()
+    {
         return $this->getUrl('webpospaypal/api/test');
     }
-
 }

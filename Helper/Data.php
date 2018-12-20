@@ -6,6 +6,7 @@
  */
 
 namespace Magestore\WebposPaypal\Helper;
+
 use Magestore\WebposPaypal\Model\Payment\Online\Paypal\DirectPaymentIntegration;
 
 /**
@@ -53,7 +54,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Encryption\EncryptorInterface $enc
-    ){
+    ) {
         $this->_storeManager = $storeManager;
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_localeDate = $localeDate;
@@ -66,7 +67,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return Magento store
      */
-    public function getStore(){
+    public function getStore()
+    {
         return $this->_storeManager->getStore();
     }
 
@@ -75,7 +77,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $data
      * @return string
      */
-    public function formatPrice($data){
+    public function formatPrice($data)
+    {
         $checkoutHelper = $this->_objectManager->get('Magento\Checkout\Helper\Data');
         return $checkoutHelper->formatPrice($data);
     }
@@ -85,7 +88,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $path
      * @return string
      */
-    public function getStoreConfig($path){
+    public function getStoreConfig($path)
+    {
         return $this->scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
@@ -93,7 +97,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getCurrentDatetime(){
+    public function getCurrentDatetime()
+    {
         return $this->_dateTime->gmtDate();
     }
 
@@ -101,7 +106,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * string class name
      * @return Model
      */
-    public function getModel($class){
+    public function getModel($class)
+    {
         return $this->_objectManager->get($class);
     }
 
@@ -110,38 +116,42 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $str
      * @return string
      */
-    public function htmlEscape($str){
+    public function htmlEscape($str)
+    {
         return htmlspecialchars($str);
     }
 
     /**
      * @return array
      */
-    public function supportPayViaEmailPayments() {
-        return array(DirectPaymentIntegration::CODE);
+    public function supportPayViaEmailPayments()
+    {
+        return [DirectPaymentIntegration::CODE];
     }
 
     /**
      * @param $code
      * @return bool
      */
-    public function isInSupportPayViaEmailPayments($code) {
+    public function isInSupportPayViaEmailPayments($code)
+    {
         return in_array($this->supportPayViaEmailPayments(), $code);
     }
 
     /**
      * @return array
      */
-    public function getPaypalConfig() {
-        $configData = array();
-        $configItems = array(
+    public function getPaypalConfig()
+    {
+        $configData = [];
+        $configItems = [
             'enable',
             'client_id',
             'client_secret',
             'is_sandbox',
             'access_token',
             'refresh_token'
-        );
+        ];
         foreach ($configItems as $configItem) {
             $configData[$configItem] = $this->getStoreConfig('webpos/payment/paypal/' . $configItem);
         }
@@ -151,7 +161,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return array|string
      */
-    public function getPaypalPaymentsStandardConfig() {
+    public function getPaypalPaymentsStandardConfig()
+    {
         return $this->getStoreConfig(
             'payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout'
         );
@@ -160,7 +171,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return array
      */
-    public function getPaypalDirectPaymentConfig() {
+    public function getPaypalDirectPaymentConfig()
+    {
         /** @var array $paypalPaymentsStandardConfig */
         $paypalPaymentsStandardConfig = $this->getStoreConfig(
             'webpos/payment/paypal'
@@ -168,7 +180,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $sandboxFlag = intval($paypalPaymentsStandardConfig['is_sandbox']);
 
-        $config = array(
+        $config = [
             "mode" => $sandboxFlag ? "sandbox" : "live",
             'log.LogEnabled' => true,
             'log.FileName' => '../PayPal.log',
@@ -177,7 +189,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             "acct1.UserName" => $this->_enc->decrypt($paypalPaymentsStandardConfig['api_username']),
             "acct1.Password" => $this->_enc->decrypt($paypalPaymentsStandardConfig['api_password']),
             "acct1.Signature" => $this->_enc->decrypt($paypalPaymentsStandardConfig['api_signature']),
-        );
+        ];
 
         return $config;
     }
@@ -185,7 +197,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return bool
      */
-    public function isAllowCustomerPayWithEmail(){
+    public function isAllowCustomerPayWithEmail()
+    {
         $enable = $this->getStoreConfig('webpos/payment/paypal/enable_send_invoice');
         return ($enable)?true:false;
     }
@@ -193,7 +206,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return bool
      */
-    public function isEnablePaypal(){
+    public function isEnablePaypal()
+    {
         $enable = $this->getStoreConfig('webpos/payment/paypal/enable');
         return ($enable)?true:false;
     }
@@ -201,7 +215,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return bool
      */
-    public function isAllowPaypalHere(){
+    public function isAllowPaypalHere()
+    {
         $enable = $this->getStoreConfig('webpos/payment/paypal/enable_paypalhere');
         return ($enable)?true:false;
     }
@@ -209,9 +224,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return array
      */
-    public function getMerchantInfo(){
-        $configData = array();
-        $configItems = array(
+    public function getMerchantInfo()
+    {
+        $configData = [];
+        $configItems = [
             'email',
             'firstname',
             'lastname',
@@ -222,7 +238,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             'state',
             'postal_code',
             'country_id'
-        );
+        ];
         foreach ($configItems as $configItem) {
             $configData[$configItem] = $this->getStoreConfig('webpos/payment/paypal/merchant_infomation/' . $configItem);
         }
@@ -232,7 +248,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return string
      */
-    public function getLogoUrl(){
+    public function getLogoUrl()
+    {
         $helper = $this->_objectManager->get('Magestore\Webpos\Helper\Data');
         $url =$helper->getWebPosImages();
         return (strpos($url, 'https') === false)?'':$url;
@@ -241,7 +258,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return bool
      */
-    public function isTaxCalculatedAfterDiscount(){
+    public function isTaxCalculatedAfterDiscount()
+    {
         $configData = $this->getStoreConfig('tax/calculation/apply_after_discount');
         return ($configData == 1)?true:false;
     }
@@ -251,7 +269,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $params
      * @return string
      */
-    public function getUrl($path, $params = array()){
+    public function getUrl($path, $params = [])
+    {
         return $this->_getUrl($path, $params);
     }
 
@@ -259,8 +278,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param $message
      * @param string $type
      */
-    public function addLog($message, $type = ''){
-        switch ($type){
+    public function addLog($message, $type = '')
+    {
+        switch ($type) {
             case 'info':
                 $this->_logger->info($message);
                 break;

@@ -44,5 +44,4 @@ class SendInvoiceResponse extends \Magento\Framework\Api\AbstractExtensibleObjec
     {
         return $this->setData(self::INVOICE, $invoice);
     }
-
 }

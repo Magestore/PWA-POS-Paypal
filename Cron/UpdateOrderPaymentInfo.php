@@ -72,7 +72,7 @@ class UpdateOrderPaymentInfo
         \Magestore\Webpos\Model\Sales\OrderRepository $orderRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magestore\Webpos\Api\Sales\Order\InvoiceRepositoryInterface  $invoiceRepositoryInterface
+        \Magestore\Webpos\Api\Sales\Order\InvoiceRepositoryInterface $invoiceRepositoryInterface
     ) {
         $this->helper = $helper;
         $this->paypalService = $paypalService;
@@ -90,7 +90,7 @@ class UpdateOrderPaymentInfo
     public function execute()
     {
         $payments = $this->getRemainingPayments();
-        if($payments->getSize()) {
+        if ($payments->getSize()) {
             foreach ($payments as $payment) {
                 $this->checkPaypalInvoiceDataForOrder($payment);
             }
@@ -100,22 +100,23 @@ class UpdateOrderPaymentInfo
     /**
      * @param \Magestore\Webpos\Model\Checkout\Order\Payment $payment
      */
-    protected function checkPaypalInvoiceDataForOrder($payment){
+    protected function checkPaypalInvoiceDataForOrder($payment)
+    {
         $invoiceId = $payment->getData(PaymentInterface::POS_PAYPAL_INVOICE_ID);
-        if($invoiceId){
-            try{
+        if ($invoiceId) {
+            try {
                 /** @var \PayPal\Api\Invoice $invoice */
                 $invoice = $this->paypalService->getInvoice($invoiceId);
-                if($this->paypalService->isInvoicePaid($invoice)){
+                if ($this->paypalService->isInvoicePaid($invoice)) {
                     //get paid summary data
                     $paidSummary = $this->paypalService->getInvoicePaidAmount($invoice);
                     $this->processPaidAmount($paidSummary, $payment);
-                } else if($this->paypalService->isInvoiceCancelled($invoice)) {
+                } elseif ($this->paypalService->isInvoiceCancelled($invoice)) {
                     $this->processCancelPayment($payment, $invoiceId);
                 }
 
                 $ppPayments = $invoice->getPayments();
-                $transactionIds = array();
+                $transactionIds = [];
 
                 if (empty($ppPayments)) {
                     return;
@@ -132,9 +133,7 @@ class UpdateOrderPaymentInfo
                 }
 
                 $payment->save();
-
-
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 $this->helper->addLog($e->getMessage());
             }
         }
@@ -143,11 +142,12 @@ class UpdateOrderPaymentInfo
     /**
      * @return bool
      */
-    protected function getRemainingPayments() {
+    protected function getRemainingPayments()
+    {
         $paymentCollection = $this->orderPaymentCollectionFactory->create()
-            ->addFieldToFilter('method', array(
+            ->addFieldToFilter('method', [
                 'in' => $this->helper->supportPayViaEmailPayments()
-            ))
+            ])
             ->addFieldToFilter('pos_paypal_active', self::POS_PAYPAL_ACTIVE)
             ->addFieldToFilter(PaymentInterface::IS_PAY_LATER, 1);
         return $paymentCollection;
@@ -161,10 +161,10 @@ class UpdateOrderPaymentInfo
      */
     protected function currencyConvert($amount, $fromCurrency = null, $toCurrency = null)
     {
-        if(!$fromCurrency){
+        if (!$fromCurrency) {
             $fromCurrency = $this->storeManager->getStore()->getBaseCurrency();
         }
-        if(!$toCurrency){
+        if (!$toCurrency) {
             $toCurrency = $this->storeManager->getStore()->getCurrentCurrency();
         }
 
@@ -175,7 +175,7 @@ class UpdateOrderPaymentInfo
         }
         $rateFromBase = $this->storeManager->getStore()->getBaseCurrency()->getRate($toCurrency);
 
-        if($rateToBase && $rateFromBase){
+        if ($rateToBase && $rateFromBase) {
             $amount = $amount * $rateToBase * $rateFromBase;
         }
         return floatval($amount);
@@ -187,17 +187,18 @@ class UpdateOrderPaymentInfo
      * @param string $currencyCode
      * @return array
      */
-    protected function getAmountsForOrder($order, $amount, $currencyCode){
+    protected function getAmountsForOrder($order, $amount, $currencyCode)
+    {
         $data = ['amount' => 0, 'base_amount' => 0];
         $orderBaseCurrencyCode = $order->getBaseCurrencyCode();
         $orderCurrencyCode = $order->getOrderCurrencyCode();
-        if($currencyCode == $orderBaseCurrencyCode){
+        if ($currencyCode == $orderBaseCurrencyCode) {
             $data['base_amount'] = floatval($amount);
             $data['amount'] = $this->currencyConvert($amount, $orderBaseCurrencyCode, $orderCurrencyCode);
-        }elseif($currencyCode == $orderCurrencyCode){
+        } elseif ($currencyCode == $orderCurrencyCode) {
             $data['amount'] = floatval($amount);
             $data['base_amount'] = $this->currencyConvert($amount, $orderCurrencyCode, $orderBaseCurrencyCode);
-        }else{
+        } else {
             $data['amount'] = $this->currencyConvert($amount, $currencyCode, $orderCurrencyCode);
             $data['base_amount'] = $this->currencyConvert($amount, $currencyCode, $orderBaseCurrencyCode);
         }
@@ -209,9 +210,10 @@ class UpdateOrderPaymentInfo
      * @param \Magestore\Webpos\Model\Payment\OrderPayment $payment
      * @throws \Exception
      */
-    protected function processPaidAmount($paidSummary, $payment){
+    protected function processPaidAmount($paidSummary, $payment)
+    {
         $order = $this->orderRepository->getById($payment->getOrderId());
-        if($order->getId()) {
+        if ($order->getId()) {
             $paidAmount = 0;
             $basePaidAmount = 0;
             //calculate summary paid by paypal
@@ -239,8 +241,7 @@ class UpdateOrderPaymentInfo
                     $order->save();
                     try {
                         $this->invoiceRepositoryInterface->createInvoiceByOrder($order);
-                    } catch(\Exception $e) {
-
+                    } catch (\Exception $e) {
                     }
                 } else {
                     $order->setBaseTotalPaid($order->getBaseTotalPaid() + $basePaidAmount);
@@ -250,7 +251,6 @@ class UpdateOrderPaymentInfo
                     $order->save();
                 }
                 $payment->save();
-
             }
         }
     }
@@ -259,7 +259,8 @@ class UpdateOrderPaymentInfo
      * @param \Magestore\Webpos\Model\Payment\OrderPayment $payment
      * @throws \Exception
      */
-    protected function processCancelPayment($payment, $invoiceId){
+    protected function processCancelPayment($payment, $invoiceId)
+    {
         $order = $this->orderRepository->getById($payment->getOrderId());
         $payment->setData('pos_paypal_active', self::POS_PAYPAL_INACTIVE);
         $payment->save();
@@ -274,8 +275,7 @@ class UpdateOrderPaymentInfo
         if ($basePaidAmount >= $baseOrderRemaining) {
             try {
                 $this->orderRepository->cancel($order);
-            } catch(\Exception $e) {
-
+            } catch (\Exception $e) {
             }
         }
     }

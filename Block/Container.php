@@ -57,15 +57,16 @@ class Container extends \Magento\Framework\View\Element\Template
     /**
      * @return string
      */
-    public function isEnableSendInvoice(){
+    public function isEnableSendInvoice()
+    {
         return ($this->helper->isAllowCustomerPayWithEmail())?'true':'false';
     }
 
     /**
      * @return bool
      */
-    public function isEnablePaypal(){
+    public function isEnablePaypal()
+    {
         return $this->helper->isEnablePaypal();
     }
-
 }

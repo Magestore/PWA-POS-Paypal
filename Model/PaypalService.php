@@ -7,7 +7,6 @@
 
 namespace Magestore\WebposPaypal\Model;
 
-
 use Magestore\WebposPaypal\Api\Data\SendInvoiceResponseInterface;
 use PayPal\Exception\PayPalConnectionException;
 
@@ -75,7 +74,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * Init default data
      * @return \Magestore\WebposPaypal\Api\PaypalServiceInterface
      */
-    public function initDefaultData(){
+    public function initDefaultData()
+    {
         $successUrl = $this->helper->getUrl('webpospaypal/payment/success');
         $cancelUrl = $this->helper->getUrl('webpospaypal/payment/cancel');
         $this->setSuccessUrl($successUrl);
@@ -89,7 +89,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @api
      * @return string|null
      */
-    public function getSuccessUrl(){
+    public function getSuccessUrl()
+    {
         return $this->successUrl;
     }
 
@@ -100,7 +101,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @param string $url
      * @return $this
      */
-    public function setSuccessUrl($url){
+    public function setSuccessUrl($url)
+    {
         $this->successUrl = $url;
     }
 
@@ -110,7 +112,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @api
      * @return string|null
      */
-    public function getCancelUrl(){
+    public function getCancelUrl()
+    {
         return $this->cancelUrl;
     }
 
@@ -120,14 +123,16 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @param string $url
      * @return $this|void
      */
-    public function setCancelUrl($url){
+    public function setCancelUrl($url)
+    {
         $this->cancelUrl = $url;
     }
 
     /**
      * @return bool
      */
-    public function isEnable(){
+    public function isEnable()
+    {
         $hasSDK = $this->paypal->validateRequiredSDK();
         $configs = $this->paypal->getConfig();
         return ($hasSDK && $configs['enable'] && !empty($configs['client_id']) && !empty($configs['client_secret']))?true:false;
@@ -136,18 +141,19 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
     /**
      * @return string
      */
-    public function getConfigurationError(){
+    public function getConfigurationError()
+    {
         $message = '';
         $hasSDK = $this->paypal->validateRequiredSDK();
         $configs = $this->paypal->getConfig();
-        if(!$hasSDK){
+        if (!$hasSDK) {
             $message = __('Paypal SDK not found, please go to the configuration to get the instruction to install the SDK');
-        }else{
-            if($configs['enable']){
-                if(empty($configs['client_id']) || empty($configs['client_secret'])){
+        } else {
+            if ($configs['enable']) {
+                if (empty($configs['client_id']) || empty($configs['client_secret'])) {
                     $message = __('Paypal application client id and client secret are required');
                 }
-            }else{
+            } else {
                 $message = __('Paypal integration is disabled');
             }
         }
@@ -159,7 +165,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @return \Magestore\WebposPaypal\Api\PaypalServiceInterface
      * @throws \Exception
      */
-    public function validate(){
+    public function validate()
+    {
         $isEnable = $this->isEnable();
         if (!$isEnable) {
             $message = $this->getConfigurationError();
@@ -175,7 +182,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @return string
      * @throws \Exception
      */
-    public function startPayment($transaction){
+    public function startPayment($transaction)
+    {
         $this->validate();
         $successUrl = $this->getSuccessUrl();
         $cancelUrl = $this->getCancelUrl();
@@ -198,7 +206,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @return string
      * @throws \Exception
      */
-    public function finishPayment($paymentId, $payerId){
+    public function finishPayment($paymentId, $payerId)
+    {
         return $this->paypal->completePayment($paymentId, $payerId);
     }
 
@@ -207,14 +216,16 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @return string
      * @throws \Exception
      */
-    public function finishPaypalHerePayment($paymentId){
+    public function finishPaypalHerePayment($paymentId)
+    {
         return $this->paypal->completePaypalHerePayment($paymentId);
     }
 
     /**
      * @return bool
      */
-    public function canConnectToApi(){
+    public function canConnectToApi()
+    {
         return $this->paypal->canConnectToApi();
     }
 
@@ -229,14 +240,15 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @return \Magestore\WebposPaypal\Api\Data\SendInvoiceResponseInterface
      * @throws \Exception
      */
-    public function createAndSendInvoiceToCustomer($billing, $shipping, $items, $totals, $totalPaid, $currencyCode, $note){
+    public function createAndSendInvoiceToCustomer($billing, $shipping, $items, $totals, $totalPaid, $currencyCode, $note)
+    {
         // validate SDK installed and some configuration, thow exception if error
         /** @var SendInvoiceResponseInterface $sendInvoiceResponse */
         $sendInvoiceResponse = $this->sendInvoiceResponseFactory->create();
 
         $this->validate();
         $enable = $this->helper->isAllowCustomerPayWithEmail();
-        if($enable){
+        if ($enable) {
             $invoice = null;
 
             try {
@@ -298,7 +310,7 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
                 foreach ($items as $item) {
                     $unitPrice = $this->paypal->createCurrency($currencyCode, $item->getUnitPrice());
                     $invoiceItem = $this->paypal->createInvoiceItem($item->getName(), $item->getQty(), $unitPrice);
-                    if($item->getTaxPercent() > 0){
+                    if ($item->getTaxPercent() > 0) {
                         $itemTax = $this->paypal->createPercentTax($item->getTaxPercent(), __('Tax'));
                         $invoiceItem->setTax($itemTax);
                     }
@@ -309,27 +321,27 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
                 $invoice = $this->paypal->createInvoiceObject($merchantInfo, $billingInfo, $shippingInfo, $paymentTerm, $invoiceItems, $note);
 
                 // set some totals data
-                if(!empty($totals)){
+                if (!empty($totals)) {
                     $discount = 0;
-                    foreach ($totals as $total){
+                    foreach ($totals as $total) {
                         $amount = $total->getAmount();
                         $code = $total->getCode();
-                        if($code == 'grandtotal'){
+                        if ($code == 'grandtotal') {
                             $grandTotal = $this->paypal->createCurrency($currencyCode, $amount);
                             $invoice->setTotalAmount($grandTotal);
                         }
-                        if($code == 'shipping' && $amount > 0){
+                        if ($code == 'shipping' && $amount > 0) {
                             $shippingTaxCurrency = $this->paypal->createCurrency($currencyCode, 0);
                             $shippingTax = $this->paypal->createFixedTax($shippingTaxCurrency, __('Tax'));
                             $shippingCurrency = $this->paypal->createCurrency($currencyCode, $amount);
                             $shippingCost = $this->paypal->createShippingCost($shippingCurrency, $shippingTax);
                             $invoice->setShippingCost($shippingCost);
                         }
-                        if($amount && $amount < 0){
+                        if ($amount && $amount < 0) {
                             $discount -= floatval($amount);
                         }
                     }
-                    if($discount > 0){
+                    if ($discount > 0) {
                         $discountCurrency = $this->paypal->createCurrency($currencyCode, $discount);
                         $discountCost = $this->paypal->createFixedCost($discountCurrency);
                         $invoice->setDiscount($discountCost);
@@ -345,16 +357,15 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
                 $invoice = $this->paypal->createInvoice($invoice);
 
                 // set total paid for invoice
-                if(!empty($totalPaid)){
+                if (!empty($totalPaid)) {
                     $totalPaid = $this->paypal->createCurrency($currencyCode, $totalPaid);
                     $paymentDetail = $this->paypal->createPaymentDetail($totalPaid, __("Paid via Magento POS system"));
                     $this->paypal->recordPaymentForInvoice($invoice, $paymentDetail);
                 }
 
                 $this->paypal->sendInvoice($invoice);
-            }
-            catch (PayPalConnectionException $e) {
-                $errorJson = $e->getData() ? json_decode($e->getData(), true) : array();
+            } catch (PayPalConnectionException $e) {
+                $errorJson = $e->getData() ? json_decode($e->getData(), true) : [];
                 $message = !empty($errorJson)
                     ? ( !empty($errorJson['message']) ? $errorJson['message'] : $errorJson['error_description'] )
                     : $e->getMessage();
@@ -363,8 +374,7 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
                     ->setMessage($message);
 
                 return $sendInvoiceResponse;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $sendInvoiceResponse
                     ->setError(true)
                     ->setMessage($e->getMessage());
@@ -374,8 +384,7 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
 
             $this->invoiceData
                 ->setNumber($invoice->getNumber())
-                ->setId($invoice->getId())
-            ;
+                ->setId($invoice->getId());
 
             $sendInvoiceResponse
                 ->setError(false)
@@ -396,13 +405,14 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @return \Magestore\WebposPaypal\Api\Data\InvoiceInterface
      * @throws \Exception
      */
-    protected function getInvoiceData($invoice){
+    protected function getInvoiceData($invoice)
+    {
         $data = $this->invoiceData;
-        if($invoice instanceof \PayPal\Api\Invoice){
+        if ($invoice instanceof \PayPal\Api\Invoice) {
             $data->setId($invoice->getId());
             $data->setNumber($invoice->getNumber());
             $data->setQrCode($this->paypal->getInvoiceQrCode($invoice));
-        }else{
+        } else {
             $data->setId('');
             $data->setNumber('');
             $data->setQrCode('');
@@ -415,7 +425,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @return \PayPal\Api\Invoice
      * @throws \Exception
      */
-    public function getInvoice($invoiceId){
+    public function getInvoice($invoiceId)
+    {
         return $this->paypal->getInvoice($invoiceId);
     }
 
@@ -423,7 +434,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @param \PayPal\Api\Invoice $invoice
      * @return bool
      */
-    public function isInvoicePaid($invoice){
+    public function isInvoicePaid($invoice)
+    {
         $paidStatus = ['PAID', 'MARKED_AS_PAID', 'PARTIALLY_PAID'];
         $status = $invoice->getStatus();
         return (in_array($status, $paidStatus))?true:false;
@@ -433,7 +445,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @param \PayPal\Api\Invoice $invoice
      * @return bool
      */
-    public function isInvoiceCancelled($invoice){
+    public function isInvoiceCancelled($invoice)
+    {
         $cancelledStatus = ['CANCELLED'];
         $status = $invoice->getStatus();
         return (in_array($status, $cancelledStatus))?true:false;
@@ -443,7 +456,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @param \PayPal\Api\Invoice $invoice
      * @return bool
      */
-    public function isInvoiceRefunded($invoice){
+    public function isInvoiceRefunded($invoice)
+    {
         $refundedStatus = ['REFUNDED', 'PARTIALLY_REFUNDED', 'MARKED_AS_REFUNDED'];
         $status = $invoice->getStatus();
         return (in_array($status, $refundedStatus))?true:false;
@@ -453,7 +467,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @param \PayPal\Api\Invoice $invoice
      * @return \PayPal\Api\PaymentSummary
      */
-    public function getInvoicePaidAmount($invoice){
+    public function getInvoicePaidAmount($invoice)
+    {
         return $invoice->getPaidAmount();
     }
 
@@ -461,14 +476,16 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @param \PayPal\Api\Invoice $invoice
      * @return \PayPal\Api\PaymentSummary
      */
-    public function getInvoiceRefundedAmount($invoice){
+    public function getInvoiceRefundedAmount($invoice)
+    {
         return $invoice->getRefundedAmount();
     }
 
     /**
      * @return string
      */
-    public function getAccessToken(){
+    public function getAccessToken()
+    {
         return $this->paypal->getAccessToken();
     }
 
@@ -477,7 +494,8 @@ class PaypalService implements \Magestore\WebposPaypal\Api\PaypalServiceInterfac
      * @return \Magestore\WebposPaypal\Api\Data\DirectResponseInterface
      * @throws \Exception
      */
-    public function directPayment($request) {
+    public function directPayment($request)
+    {
         return $this->paypal->directPayment($request);
     }
 }

@@ -36,7 +36,7 @@ abstract class AbstractAction extends \Magento\Backend\App\Action
         \Magento\Backend\App\Action\Context $context,
         \Magestore\WebposPaypal\Api\PaypalServiceInterface $paypalService,
         \Magestore\WebposPaypal\Helper\Data $helper
-    ){
+    ) {
         parent::__construct($context);
         $this->paypalService = $paypalService;
         $this->helper = $helper;
@@ -47,7 +47,8 @@ abstract class AbstractAction extends \Magento\Backend\App\Action
      * @param $data
      * @return mixed
      */
-    public function createJsonResult($data){
+    public function createJsonResult($data)
+    {
         $resultJson = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_JSON);
         return $resultJson->setData($data);
     }

@@ -11,14 +11,16 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class PayflowproIntegration extends \Magento\Paypal\Model\Payflow\Transparent {
+class PayflowproIntegration extends \Magento\Paypal\Model\Payflow\Transparent
+{
     /**
      * Payment method code
      *
      * @var string
      */
     protected $_code = 'payflowpro_integration';
-    public function getConfigPaymentAction() {
+    public function getConfigPaymentAction()
+    {
         return '';
     }
     /**
@@ -36,7 +38,8 @@ class PayflowproIntegration extends \Magento\Paypal\Model\Payflow\Transparent {
     {
         return false;
     }
-    public function isActiveWebpos($storeId = null) {
+    public function isActiveWebpos($storeId = null)
+    {
         $pathPayflowPro = 'payment/' . Config::METHOD_PAYFLOWPRO . '/active';
         $pathPaymentPro = 'payment/' . Config::METHOD_PAYMENT_PRO . '/active';
         return (bool)(int) $this->_scopeConfig->getValue($pathPayflowPro, ScopeInterface::SCOPE_STORE, $storeId)
@@ -56,7 +59,7 @@ class PayflowproIntegration extends \Magento\Paypal\Model\Payflow\Transparent {
     {
         // change amount
         $amount = (float)$payment->getAdditionalInformation('paypalProAmount');
-        if(!$amount) {
+        if (!$amount) {
             $amount = 0;
         }
 

@@ -21,7 +21,8 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements \M
      * @api
      * @return string|null
      */
-    public function getName(){
+    public function getName()
+    {
         return $this->_get(self::NAME);
     }
 
@@ -32,7 +33,8 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements \M
      * @param string $name
      * @return $this
      */
-    public function setName($name){
+    public function setName($name)
+    {
         return $this->setData(self::NAME, $name);
     }
 
@@ -42,7 +44,8 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements \M
      * @api
      * @return string|null
      */
-    public function getQty(){
+    public function getQty()
+    {
         return $this->_get(self::QTY);
     }
 
@@ -53,7 +56,8 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements \M
      * @param string $qty
      * @return $this
      */
-    public function setQty($qty){
+    public function setQty($qty)
+    {
         return $this->setData(self::QTY, $qty);
     }
 
@@ -63,7 +67,8 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements \M
      * @api
      * @return string|null
      */
-    public function getUnitPrice(){
+    public function getUnitPrice()
+    {
         return $this->_get(self::UNIT_PRICE);
     }
 
@@ -74,7 +79,8 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements \M
      * @param string $unitPrice
      * @return $this
      */
-    public function setUnitPrice($unitPrice){
+    public function setUnitPrice($unitPrice)
+    {
         return $this->setData(self::UNIT_PRICE, $unitPrice);
     }
 
@@ -84,7 +90,8 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements \M
      * @api
      * @return string|null
      */
-    public function getTaxPercent(){
+    public function getTaxPercent()
+    {
         return $this->_get(self::TAX_PERCENT);
     }
 
@@ -95,7 +102,8 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject implements \M
      * @param string $taxPercent
      * @return $this
      */
-    public function setTaxPercent($taxPercent){
+    public function setTaxPercent($taxPercent)
+    {
         return $this->setData(self::TAX_PERCENT, $taxPercent);
     }
 }

@@ -50,7 +50,6 @@ use PayPal\PayPalAPI\DoDirectPaymentReq;
 use PayPal\PayPalAPI\DoDirectPaymentRequestType;
 use PayPal\Service\PayPalAPIInterfaceServiceService;
 
-
 class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
 {
     use Formatter;
@@ -92,7 +91,7 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
     public function __construct(
         \Magestore\WebposPaypal\Helper\Data $helper,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Config\ConfigResource\ConfigInterface  $resourceConfig,
+        \Magento\Framework\App\Config\ConfigResource\ConfigInterface $resourceConfig,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magestore\WebposPaypal\Model\Data\DirectResponseFactory $directResponseFactory
     ) {
@@ -106,7 +105,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
     /**
      * @return bool
      */
-    public function validateRequiredSDK(){
+    public function validateRequiredSDK()
+    {
         return (class_exists("\\PayPal\\Rest\\ApiContext") && class_exists("\\PayPal\\Auth\\OAuthTokenCredential"))?true:false;
     }
 
@@ -114,7 +114,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $key
      * @return array
      */
-    public function getConfig($key = ''){
+    public function getConfig($key = '')
+    {
         $configs = $this->helper->getPaypalConfig();
         return ($key)?$configs[$key]:$configs;
     }
@@ -122,7 +123,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
     /**
      * @return \PayPal\Rest\ApiContext
      */
-    public function getApiContext(){
+    public function getApiContext()
+    {
         $clientId = $this->getConfig('client_id');
         $clientSecret = $this->getConfig('client_secret');
         $apiContext = new \PayPal\Rest\ApiContext(
@@ -132,12 +134,12 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
             )
         );
         $environment = 'live';
-        if($this->getConfig('is_sandbox')) {
+        if ($this->getConfig('is_sandbox')) {
             $environment = 'sandbox';
         }
-        $apiContext->setConfig(array(
+        $apiContext->setConfig([
             'mode' => $environment
-        ));
+        ]);
         $apiContext->addRequestHeader('PayPal-Partner-Attribution-Id', 'Magestore_POS');
         return $apiContext;
     }
@@ -149,7 +151,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return string
      * @throws \Exception
      */
-    public function createPayment($successUrl, $cancelUrl, $transactions){
+    public function createPayment($successUrl, $cancelUrl, $transactions)
+    {
         $apiContext = $this->getApiContext();
 
         $payer = new Payer();
@@ -169,7 +172,7 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
         try {
             $payment->create($apiContext);
             $approvalUrl = $payment->getApprovalLink();
-            if($approvalUrl){
+            if ($approvalUrl) {
                 $url = $approvalUrl;
             }
         } catch (\PayPal\Exception\PayPalConnectionException $e) {
@@ -189,12 +192,13 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $description
      * @return \PayPal\Api\Transaction
      */
-    public function createTransaction($subtotal, $shipping, $tax, $total, $currencyCode, $description = ''){
+    public function createTransaction($subtotal, $shipping, $tax, $total, $currencyCode, $description = '')
+    {
         $amount = new Amount();
         $amount->setCurrency($currencyCode)
             ->setTotal($total);
 
-        if($subtotal > 0 || $shipping > 0 || $tax > 0){
+        if ($subtotal > 0 || $shipping > 0 || $tax > 0) {
             $details = new Details();
             $details->setShipping($shipping)
                 ->setTax($tax)
@@ -214,7 +218,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return string
      * @throws \Exception
      */
-    public function completePayment($paymentId, $payerId){
+    public function completePayment($paymentId, $payerId)
+    {
         $apiContext = $this->getApiContext();
         $payment = Payment::get($paymentId, $apiContext);
         $execution = new PaymentExecution();
@@ -224,9 +229,9 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
         try {
             $payment->execute($execution, $apiContext);
             $transactions = $payment->getTransactions();
-            if(!empty($transactions) && isset($transactions[0])){
+            if (!empty($transactions) && isset($transactions[0])) {
                 $relatedResources = $transactions[0]->getRelatedResources();
-                if(!empty($relatedResources) && isset($relatedResources[0])){
+                if (!empty($relatedResources) && isset($relatedResources[0])) {
                     $sale = $relatedResources[0]->getSale();
                     $transactionId = $sale->getId();
                 }
@@ -244,7 +249,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return string
      * @throws \Exception
      */
-    public function completePaypalHerePayment($paymentId){
+    public function completePaypalHerePayment($paymentId)
+    {
         $apiContext = $this->getApiContext();
         $payment = Payment::get($paymentId, $apiContext);
 
@@ -252,9 +258,9 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
         try {
             $payment->get($paymentId, $apiContext);
             $transactions = $payment->getTransactions();
-            if(!empty($transactions) && isset($transactions[0])){
+            if (!empty($transactions) && isset($transactions[0])) {
                 $relatedResources = $transactions[0]->getRelatedResources();
-                if(!empty($relatedResources) && isset($relatedResources[0])){
+                if (!empty($relatedResources) && isset($relatedResources[0])) {
                     $sale = $relatedResources[0]->getSale();
                     $transactionId = $sale->getId();
                 }
@@ -270,13 +276,14 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
     /**
      * @return bool
      */
-    public function canConnectToApi(){
+    public function canConnectToApi()
+    {
         $context = $this->getApiContext();
-        $params = array('count' => 1, 'start_index' => 0);
+        $params = ['count' => 1, 'start_index' => 0];
         $connected = true;
-        try{
+        try {
             Payment::all($params, $context);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $connected = false;
         }
         return $connected;
@@ -292,16 +299,17 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return \PayPal\Api\Invoice
      * @throws \Exception
      */
-    public function createInvoiceObject($merchantInfo, $billingInfo, $shippingInfo, $paymentTerm, $items, $note = ''){
+    public function createInvoiceObject($merchantInfo, $billingInfo, $shippingInfo, $paymentTerm, $items, $note = '')
+    {
         $logo = $this->helper->getLogoUrl();
         $invoice = new Invoice();
         $invoice->setMerchantInfo($merchantInfo)
-            ->setBillingInfo(array($billingInfo))
+            ->setBillingInfo([$billingInfo])
             ->setNote($note)
             ->setPaymentTerm($paymentTerm)
             ->setShippingInfo($shippingInfo)
             ->setItems($items);
-        if($logo){
+        if ($logo) {
             $invoice->setLogoUrl($logo);
         }
         return $invoice;
@@ -312,7 +320,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return mixed
      * @throws \Exception
      */
-    public function createInvoice($invoice){
+    public function createInvoice($invoice)
+    {
         $apiContext = $this->getApiContext();
         try {
             $invoice->create($apiContext);
@@ -327,7 +336,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return \PayPal\Api\Invoice
      * @throws \Exception
      */
-    public function createInvoiceAndSend($invoice){
+    public function createInvoiceAndSend($invoice)
+    {
         $apiContext = $this->getApiContext();
         try {
             $invoice->create($apiContext);
@@ -343,7 +353,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return \Magestore\WebposPaypal\Model\Paypal
      * @throws \Exception
      */
-    public function sendInvoice($invoice){
+    public function sendInvoice($invoice)
+    {
         try {
             $apiContext = $this->getApiContext();
             $invoice->send($apiContext);
@@ -358,7 +369,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return \Magestore\WebposPaypal\Model\Paypal
      * @throws \Exception
      */
-    public function sendInvoiceById($invoiceId){
+    public function sendInvoiceById($invoiceId)
+    {
         try {
             $apiContext = $this->getApiContext();
             $invoice = Invoice::get($invoiceId, $apiContext);
@@ -374,10 +386,11 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return string
      * @throws \Exception
      */
-    public function getInvoiceQrCode($invoice){
+    public function getInvoiceQrCode($invoice)
+    {
         try {
             $apiContext = $this->getApiContext();
-            $image = $invoice->qrCode($invoice->getId(), array(), $apiContext);
+            $image = $invoice->qrCode($invoice->getId(), [], $apiContext);
             $qrCode =  $image->getImage();
         } catch (\Exception $e) {
             throw $e;
@@ -394,7 +407,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param \PayPal\Api\Address $address
      * @return \PayPal\Api\MerchantInfo
      */
-    public function createMerchantInfo($email, $firstname, $lastname, $businessName, $phone, $address){
+    public function createMerchantInfo($email, $firstname, $lastname, $businessName, $phone, $address)
+    {
         $merchantInfo = new MerchantInfo();
         $merchantInfo->setEmail($email)
             ->setFirstName($firstname)
@@ -410,7 +424,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $number
      * @return \PayPal\Api\Phone
      */
-    public function createPhone($countryCode, $number){
+    public function createPhone($countryCode, $number)
+    {
         $phone = new Phone();
         $phone->setCountryCode($countryCode)
             ->setNationalNumber($number);
@@ -426,7 +441,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $countryCode
      * @return \PayPal\Api\Address
      */
-    public function createAddress($line1, $line2, $city, $state, $postalCode, $countryCode){
+    public function createAddress($line1, $line2, $city, $state, $postalCode, $countryCode)
+    {
         $address = new Address();
         $address->setLine1($line1)->setLine2($line2)
             ->setCity($city)
@@ -446,7 +462,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param \PayPal\Api\InvoiceAddress $invoiceAddress
      * @return \PayPal\Api\BillingInfo
      */
-    public function createBillingInfo($email, $firstname, $lastname, $businessName, $phone, $addtionalInfo = '', $invoiceAddress){
+    public function createBillingInfo($email, $firstname, $lastname, $businessName, $phone, $addtionalInfo = '', $invoiceAddress)
+    {
         $billing = new BillingInfo();
         $billing->setEmail($email);
         $billing->setFirstName($firstname);
@@ -469,7 +486,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $countryCode
      * @return \PayPal\Api\InvoiceAddress
      */
-    public function createInvoiceAddress($line1, $line2, $city, $state, $postalCode, $countryCode){
+    public function createInvoiceAddress($line1, $line2, $city, $state, $postalCode, $countryCode)
+    {
         $address = new InvoiceAddress();
         $address->setLine1($line1)->setLine2($line2)
             ->setCity($city)
@@ -487,7 +505,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param \PayPal\Api\InvoiceAddress $invoiceAddress
      * @return \PayPal\Api\ShippingInfo
      */
-    public function createShippingInfo($firstname, $lastname, $businessName, $phone, $invoiceAddress){
+    public function createShippingInfo($firstname, $lastname, $businessName, $phone, $invoiceAddress)
+    {
         $shipping = new ShippingInfo();
         $shipping->setFirstName($firstname)
             ->setLastName($lastname)
@@ -502,12 +521,13 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $dueDate
      * @return \PayPal\Api\PaymentTerm
      */
-    public function createPaymentTerm($termType, $dueDate = ''){
+    public function createPaymentTerm($termType, $dueDate = '')
+    {
         $paymentTerm = new PaymentTerm();
-        if($termType){
+        if ($termType) {
             $paymentTerm->setTermType($termType);
-        }else{
-            if($dueDate){
+        } else {
+            if ($dueDate) {
                 $paymentTerm->setDueDate($dueDate);
             }
         }
@@ -518,7 +538,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $percent
      * @return \PayPal\Api\Cost
      */
-    public function createPercentCost($percent){
+    public function createPercentCost($percent)
+    {
         $cost = new Cost();
         $cost->setPercent($percent);
         return $cost;
@@ -528,7 +549,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param \PayPal\Api\Currency $amount
      * @return \PayPal\Api\Cost
      */
-    public function createFixedCost($amount){
+    public function createFixedCost($amount)
+    {
         $cost = new Cost();
         $cost->setAmount($amount);
         return $cost;
@@ -539,7 +561,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string|float $value
      * @return \PayPal\Api\Currency
      */
-    public function createCurrency($currencyCode, $value){
+    public function createCurrency($currencyCode, $value)
+    {
         $currency = new Currency();
         $currency->setCurrency($currencyCode);
         $currency->setValue($value);
@@ -551,7 +574,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $name
      * @return \PayPal\Api\Tax
      */
-    public function createPercentTax($percent, $name = ''){
+    public function createPercentTax($percent, $name = '')
+    {
         $tax = new Tax();
         $tax->setPercent($percent)->setName($name);
         return $tax;
@@ -562,7 +586,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $name
      * @return \PayPal\Api\Tax
      */
-    public function createFixedTax($amount, $name = ''){
+    public function createFixedTax($amount, $name = '')
+    {
         $tax = new Tax();
         $tax->setAmount($amount)->setName($name);
         return $tax;
@@ -574,7 +599,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param \PayPal\Api\Currency $unitPrice
      * @return \PayPal\Api\InvoiceItem
      */
-    public function createInvoiceItem($name, $qty, $unitPrice){
+    public function createInvoiceItem($name, $qty, $unitPrice)
+    {
         $item = new InvoiceItem();
         $item->setName($name)
             ->setQuantity($qty)
@@ -586,7 +612,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param \PayPal\Api\Currency $other
      * @return \PayPal\Api\PaymentSummary
      */
-    public function createPaymentSummary($other){
+    public function createPaymentSummary($other)
+    {
         $paymentSummary = new PaymentSummary();
         $paymentSummary->setOther($other);
         return $paymentSummary;
@@ -597,7 +624,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param \PayPal\Api\Tax $tax
      * @return \PayPal\Api\ShippingCost
      */
-    public function createShippingCost($amount, $tax){
+    public function createShippingCost($amount, $tax)
+    {
         $shippingCost = new ShippingCost();
         $shippingCost->setAmount($amount);
         $shippingCost->setTax($tax);
@@ -609,7 +637,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return \PayPal\Api\Invoice
      * @throws \Exception
      */
-    public function getInvoice($invoiceId){
+    public function getInvoice($invoiceId)
+    {
         try {
             $apiContext = $this->getApiContext();
             $invoice = Invoice::get($invoiceId, $apiContext);
@@ -625,7 +654,8 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @param string $method
      * @return \PayPal\Api\PaymentDetail
      */
-    public function createPaymentDetail($amount, $note = "", $method = "OTHER"){
+    public function createPaymentDetail($amount, $note = "", $method = "OTHER")
+    {
         $paymentDetail = new PaymentDetail();
         $paymentDetail->setMethod($method);//["BANK_TRANSFER", "CASH", "CHECK", "CREDIT_CARD", "DEBIT_CARD", "PAYPAL", "WIRE_TRANSFER", "OTHER"]
         $paymentDetail->setNote($note);
@@ -639,10 +669,11 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return $this
      * @throws \Exception
      */
-    public function recordPaymentForInvoice($invoice, $paymentDetail){
+    public function recordPaymentForInvoice($invoice, $paymentDetail)
+    {
         try {
             $apiContext = $this->getApiContext();
-            $invoice->recordPayment($paymentDetail,$apiContext);
+            $invoice->recordPayment($paymentDetail, $apiContext);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -660,11 +691,11 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
         $apiContext = $this->getApiContext();
         $clientId = $this->getConfig('client_id');
         $clientSecret = $this->getConfig('client_secret');
-        $params = array(
+        $params = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
             'code' => $authCode
-        );
+        ];
         $tokenInfo = OpenIdTokeninfo::createFromAuthorizationCode($params, null, null, $apiContext);
         return $tokenInfo;
     }
@@ -675,22 +706,23 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
      * @return string
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function getAccessToken(){
+    public function getAccessToken()
+    {
         $apiContext = $this->getApiContext();
         $clientId = $this->getConfig('client_id');
         $clientSecret = $this->getConfig('client_secret');
         $refreshToken = $this->getConfig('refresh_token');
-        if(!$refreshToken) {
+        if (!$refreshToken) {
             throw new StateException(__('Refresh token was missing'));
         }
-        $params = array(
+        $params = [
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
             'refresh_token' => $refreshToken
-        );
+        ];
         $openIdTokenInfo = new OpenIdTokeninfo();
         $tokenInfo = $openIdTokenInfo->createFromRefreshToken($params, $apiContext);
-        if($tokenInfo) {
+        if ($tokenInfo) {
             $accessToken = $tokenInfo->access_token;
             if ($accessToken) {
                 $this->resourceConfig->saveConfig(
@@ -714,7 +746,7 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
     {
         $firstName = $addressData->getFirstname() ?:"";
         $lastName = $addressData->getLastname() ?:"";
-        $street = $addressData->getStreet() ?:array();
+        $street = $addressData->getStreet() ?:[];
 
         $address = new AddressType();
         $address->Name = "$firstName $lastName";
@@ -872,12 +904,9 @@ class Paypal implements \Magestore\WebposPaypal\Api\PaypalInterface
 
             $directResponse->setTransactionId($doDirectPaymentResponse->TransactionID);
             return $directResponse;
-
         } catch (\Exception $ex) {
             $directResponse->setError(true)->setMessage($ex->getMessage());
             return $directResponse;
         }
     }
-
-
 }

@@ -108,7 +108,7 @@ class Paypalsignin extends Field
     {
         $paypalConfig = $this->helper->getPaypalConfig();
         $isSandBox = $paypalConfig['is_sandbox'];
-        if($isSandBox) {
+        if ($isSandBox) {
             $url = 'https://www.sandbox.paypal.com/signin/authorize';
         } else {
             $url = 'https://www.paypal.com/signin/authorize';
@@ -134,5 +134,4 @@ class Paypalsignin extends Field
 
         return $button->toHtml();
     }
-
 }

@@ -35,10 +35,10 @@ class Paypalsignin extends \Magento\Framework\App\Action\Action
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\App\Config\ConfigResource\ConfigInterface  $resourceConfig,
+        \Magento\Framework\App\Config\ConfigResource\ConfigInterface $resourceConfig,
         \Magestore\WebposPaypal\Model\Paypal $paypal,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-    ){
+    ) {
         parent::__construct($context);
         $this->resourceConfig = $resourceConfig;
         $this->paypal = $paypal;
@@ -55,7 +55,7 @@ class Paypalsignin extends \Magento\Framework\App\Action\Action
         $authCode = $this->getRequest()->getParam('code');
         $tokenInfo = '';
         $response = '';
-        if($authCode) {
+        if ($authCode) {
             try {
                 $tokenInfo = $this->paypal->getTokenInfo($authCode);
             } catch (\PayPal\Exception\PayPalConnectionException $ex) {
@@ -63,7 +63,7 @@ class Paypalsignin extends \Magento\Framework\App\Action\Action
             } catch (\Exception $ex) {
                 $response = $ex->getMessage();
             }
-            if($tokenInfo) {
+            if ($tokenInfo) {
                 $accessToken = $tokenInfo->access_token;
                 $refreshToken = $tokenInfo->refresh_token;
                 if ($accessToken) {

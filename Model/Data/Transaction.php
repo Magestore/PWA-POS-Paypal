@@ -20,7 +20,8 @@ class Transaction extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * @api
      * @return float|null
      */
-    public function getTotal(){
+    public function getTotal()
+    {
         return $this->_get(self::TOTAL);
     }
 
@@ -31,7 +32,8 @@ class Transaction extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * @param float $total
      * @return $this
      */
-    public function setTotal($total){
+    public function setTotal($total)
+    {
         return $this->setData(self::TOTAL, $total);
     }
 
@@ -41,7 +43,8 @@ class Transaction extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * @api
      * @return string|null
      */
-    public function getCurrency(){
+    public function getCurrency()
+    {
         return $this->_get(self::CURRENCY);
     }
 
@@ -52,7 +55,8 @@ class Transaction extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * @param string $currency
      * @return $this
      */
-    public function setCurrency($currency){
+    public function setCurrency($currency)
+    {
         return $this->setData(self::CURRENCY, $currency);
     }
 
@@ -62,7 +66,8 @@ class Transaction extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * @api
      * @return string|null
      */
-    public function getDescription(){
+    public function getDescription()
+    {
         return $this->_get(self::DESCRIPTION);
     }
 
@@ -73,7 +78,8 @@ class Transaction extends \Magento\Framework\Api\AbstractExtensibleObject implem
      * @param string $description
      * @return $this
      */
-    public function setDescription($description){
+    public function setDescription($description)
+    {
         return $this->setData(self::DESCRIPTION, $description);
     }
 }

@@ -89,5 +89,4 @@ interface ItemInterface
      * @return $this
      */
     public function setTaxPercent($taxPercent);
-
 }

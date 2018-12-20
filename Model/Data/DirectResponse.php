@@ -44,5 +44,4 @@ class DirectResponse extends \Magento\Framework\Api\AbstractExtensibleObject imp
     {
         return $this->setData(self::TRANSACTION_ID, $transactionId);
     }
-
 }

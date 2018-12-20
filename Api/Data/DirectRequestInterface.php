@@ -106,5 +106,4 @@ interface DirectRequestInterface
      * @return $this
      */
     public function setOrderIncrementId($orderIncrementId);
-
 }

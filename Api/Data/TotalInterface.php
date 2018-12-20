@@ -53,5 +53,4 @@ interface TotalInterface
      * @return $this
      */
     public function setAmount($amount);
-
 }

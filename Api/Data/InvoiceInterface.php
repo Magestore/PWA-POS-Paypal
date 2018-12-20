@@ -71,5 +71,4 @@ interface InvoiceInterface
      * @return $this
      */
     public function setQrCode($qrCode);
-
 }

@@ -8,7 +8,8 @@ namespace Magestore\WebposPaypal\Model\Payment\Online\Paypal;
 
 const PAYMENT_METHOD_CODE = 'ppdirectpayment_integration';
 
-class DirectPaymentIntegration extends \Magestore\Payment\Model\Payment\AbstractMethod {
+class DirectPaymentIntegration extends \Magestore\Payment\Model\Payment\AbstractMethod
+{
 
     const CODE = PAYMENT_METHOD_CODE;
     /**
@@ -25,5 +26,4 @@ class DirectPaymentIntegration extends \Magestore\Payment\Model\Payment\Abstract
      * @var string
      */
     protected $_formBlockType = 'Magestore\Payment\Block\Payment\Method\CreditCard\CreditCard';
-
 }

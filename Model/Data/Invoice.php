@@ -21,7 +21,8 @@ class Invoice extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @api
      * @return string|null
      */
-    public function getId(){
+    public function getId()
+    {
         return $this->_get(self::ID);
     }
 
@@ -32,7 +33,8 @@ class Invoice extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @param string $id
      * @return $this
      */
-    public function setId($id){
+    public function setId($id)
+    {
         return $this->setData(self::ID, $id);
     }
 
@@ -42,7 +44,8 @@ class Invoice extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @api
      * @return string|null
      */
-    public function getNumber(){
+    public function getNumber()
+    {
         return $this->_get(self::NUMBER);
     }
 
@@ -53,7 +56,8 @@ class Invoice extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @param string $number
      * @return $this
      */
-    public function setNumber($number){
+    public function setNumber($number)
+    {
         return $this->setData(self::NUMBER, $number);
     }
 
@@ -63,7 +67,8 @@ class Invoice extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @api
      * @return string|null
      */
-    public function getQrCode(){
+    public function getQrCode()
+    {
         return $this->_get(self::QR_CODE);
     }
 
@@ -74,7 +79,8 @@ class Invoice extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @param string $qrCode
      * @return $this
      */
-    public function setQrCode($qrCode){
+    public function setQrCode($qrCode)
+    {
         return $this->setData(self::QR_CODE, $qrCode);
     }
 }

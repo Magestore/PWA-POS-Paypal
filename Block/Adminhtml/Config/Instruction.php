@@ -7,7 +7,6 @@
 
 namespace Magestore\WebposPaypal\Block\Adminhtml\Config;
 
-
 class Instruction extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**

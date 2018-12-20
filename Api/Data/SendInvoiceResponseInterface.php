@@ -70,6 +70,4 @@ interface SendInvoiceResponseInterface
      * @return $this
      */
     public function setInvoice($invoice);
-
-
 }
